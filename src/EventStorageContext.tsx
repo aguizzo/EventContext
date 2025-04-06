@@ -1,5 +1,5 @@
 // src/EventStorageContext.tsx
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { SelectedEventProvider } from "./SelectedEventContext";
 
 // Define the shape of the event data
@@ -39,26 +39,24 @@ export const useEventStorageContext = () => {
   return context;
 };
 
+// Initialize events from local storage
+const initializeEvents = () => {
+  const storedIds = JSON.parse(
+    localStorage.getItem("eventIds") || "[]"
+  ) as string[];
+  return storedIds
+    .map((id) => {
+      const eventData = localStorage.getItem(`event-${id}`);
+      return eventData ? JSON.parse(eventData) : null;
+    })
+    .filter(Boolean) as Event[];
+};
+
 // Provider component
 export const EventProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [events, setEvents] = useState<Event[]>([]);
-
-  // Load events from local storage on mount
-  useEffect(() => {
-    const storedIds = JSON.parse(
-      localStorage.getItem("eventIds") || "[]"
-    ) as string[];
-    const loadedEvents = storedIds
-      .map((id) => {
-        const eventData = localStorage.getItem(`event-${id}`);
-        return eventData ? JSON.parse(eventData) : null;
-      })
-      .filter(Boolean) as Event[];
-
-    setEvents(loadedEvents);
-  }, []);
+  const [events, setEvents] = useState<Event[]>(initializeEvents);
 
   // Add a new event and save it to local storage
   const addEvent = (event: Event) => {
