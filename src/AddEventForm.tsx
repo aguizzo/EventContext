@@ -3,7 +3,7 @@ import { useEventContext } from "./EventContext";
 
 const AddEventForm: React.FC = () => {
   const { addEvent } = useEventContext();
-  
+
   const [formData, setFormData] = useState({
     id: "",
     title: "",
@@ -28,13 +28,39 @@ const AddEventForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit}>
       <input name="id" placeholder="ID" onChange={handleChange} required />
-      <input name="title" placeholder="Title" onChange={handleChange} required />
+      <input
+        name="title"
+        placeholder="Title"
+        onChange={handleChange}
+        required
+      />
       <input name="date" placeholder="Date" onChange={handleChange} required />
-      <input name="guests" placeholder="Guests" type="number" onChange={handleChange} required />
-      <input name="status" placeholder="Status" onChange={handleChange} required />
-      <input name="image" placeholder="Image URL" onChange={handleChange} required />
+      <input
+        name="guests"
+        placeholder="Guests"
+        type="number"
+        onChange={handleChange}
+        required
+      />
+      <input
+        name="status"
+        placeholder="Status"
+        onChange={handleChange}
+        required
+      />
+      <input
+        name="image"
+        placeholder="Image URL"
+        onChange={handleChange}
+        required
+      />
       <input name="type" placeholder="Type" onChange={handleChange} required />
-      <input name="location" placeholder="Location" onChange={handleChange} required />
+      <input
+        name="location"
+        placeholder="Location"
+        onChange={handleChange}
+        required
+      />
       <button type="submit">Add Event</button>
     </form>
   );

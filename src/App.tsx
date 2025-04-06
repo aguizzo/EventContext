@@ -1,7 +1,7 @@
 import React from "react";
 import { EventProvider } from "./EventContext";
 import AddEventForm from "./AddEventForm";
-import './App.css'
+import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import EventList from "./EventList";
 //import EditEvent from "./EditEvent";
@@ -10,21 +10,23 @@ import EditEventContextReducer from "./EditEventContextReducer";
 const App: React.FC = () => {
   return (
     <EventProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
               <>
                 <h1>Event Manager</h1>
                 <AddEventForm />
                 <EventList />
               </>
-            } />
-            <Route path="/edit/:id" element={<EditEventContextReducer />} />
-          </Routes>
-        </Router>
+            }
+          />
+          <Route path="/edit/:id" element={<EditEventContextReducer />} />
+        </Routes>
+      </Router>
     </EventProvider>
-    
   );
 };
 
-export default App
+export default App;
