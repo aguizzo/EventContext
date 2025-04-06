@@ -1,0 +1,54 @@
+import React, { useReducer, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Event } from "./EventContext";
+import { useCurrentEventContext } from "./SelectedEventContext";
+
+const EditEventContextReducer: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const { currentEvent, dispatch } = useCurrentEventContext();
+ 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (id) {
+      dispatch({ type: 'SET_EVENT', id: id });
+    }
+  }, [id]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ 
+      type: 'UPDATE_FIELD',
+      field: e.target.name,
+      value: e.target.value 
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    // e.preventDefault();
+    // updateEvent(state);
+    // navigate('/');
+  };
+
+  const handleDelete = () => {
+    // removeEvent(state.id);
+    // navigate('/');
+  };
+
+  if (!currentEvent) return <div>Event not found</div>;
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input name="title" value={currentEvent.title || ""} onChange={handleChange} />
+      <input name="date" value={currentEvent.date || ""} onChange={handleChange} />
+      <input name="guests" type="number" value={currentEvent.guests || 0} onChange={handleChange} />
+      <input name="status" value={currentEvent.status || ""} onChange={handleChange} />
+      <input name="image" value={currentEvent.image || ""} onChange={handleChange} />
+      <input name="type" value={currentEvent.type || ""} onChange={handleChange} />
+      <input name="location" value={currentEvent.location || ""} onChange={handleChange} />
+      <button type="submit">Update</button>
+      <button type="button" onClick={handleDelete}>Delete</button>
+    </form>
+  );
+};
+
+export default EditEventContextReducer;

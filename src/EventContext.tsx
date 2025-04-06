@@ -1,5 +1,6 @@
 // src/EventContext.tsx
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { SelectedEventProvider } from "./SelectedEventContext";
 
 // Define the shape of the event data
 export interface Event {
@@ -86,7 +87,9 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   return (
     <EventContext.Provider value={{ events, addEvent, getEventById, updateEvent, removeEvent }}>
-      {children}
+        <SelectedEventProvider>
+            {children}
+        </SelectedEventProvider>
     </EventContext.Provider>
   );
 };
