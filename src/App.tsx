@@ -1,15 +1,26 @@
 import React from "react";
 import { EventProvider } from "./EventContext";
-import EventList from "./EventList";
 import AddEventForm from "./AddEventForm";
 import './App.css'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import EventList from "./EventList";
+import EditEvent from "./EditEvent";
 
 const App: React.FC = () => {
   return (
     <EventProvider>
-      <h1>Event Manager</h1>
-      <AddEventForm />
-      <EventList />
+      <Router>
+        <Routes>
+          <Route path="/" element={
+            <>
+              <h1>Event Manager</h1>
+              <AddEventForm />
+              <EventList />
+            </>
+          } />
+          <Route path="/edit/:id" element={<EditEvent />} />
+        </Routes>
+      </Router>
     </EventProvider>
   );
 };

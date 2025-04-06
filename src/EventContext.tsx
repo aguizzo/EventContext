@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 // Define the shape of the event data
-interface Event {
+export interface Event {
   id: string;
   title: string;
   date: string;
@@ -15,10 +15,12 @@ interface Event {
 
 // Define the shape of the context
 interface EventContextType {
-  events: Event[];
-  addEvent: (event: Event) => void;
-  getEventById: (id: string) => Event | undefined;
-}
+    events: Event[];
+    addEvent: (event: Event) => void;
+    getEventById: (id: string) => Event | undefined;
+    updateEvent: (event: Event) => void;
+    removeEvent: (id: string) => void;
+  }
 
 // Create the context
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -62,8 +64,28 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return events.find((event) => event.id === id);
   };
 
+  const updateEvent = (updatedEvent: Event) => {
+    setEvents(prevEvents => {
+      const updatedEvents = prevEvents.map(event => 
+        event.id === updatedEvent.id ? updatedEvent : event
+      );
+      localStorage.setItem(`event-${updatedEvent.id}`, JSON.stringify(updatedEvent));
+      return updatedEvents;
+    });
+  };
+  
+  const removeEvent = (id: string) => {
+    setEvents(prevEvents => {
+      const updatedEvents = prevEvents.filter(event => event.id !== id);
+      const updatedIds = updatedEvents.map(e => e.id);
+      localStorage.setItem("eventIds", JSON.stringify(updatedIds));
+      localStorage.removeItem(`event-${id}`);
+      return updatedEvents;
+    });
+  };
+
   return (
-    <EventContext.Provider value={{ events, addEvent, getEventById }}>
+    <EventContext.Provider value={{ events, addEvent, getEventById, updateEvent, removeEvent }}>
       {children}
     </EventContext.Provider>
   );
