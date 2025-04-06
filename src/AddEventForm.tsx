@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useEventContext } from "./EventContext";
+import { useEventStorageContext } from "./EventStorageContext";
 
 const AddEventForm: React.FC = () => {
-  const { addEvent } = useEventContext();
+  const { addEvent } = useEventStorageContext();
 
   const [formData, setFormData] = useState({
     id: "",

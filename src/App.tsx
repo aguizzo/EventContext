@@ -1,11 +1,10 @@
 import React from "react";
-import { EventProvider } from "./EventContext";
+import { EventProvider } from "./EventStorageContext";
 import AddEventForm from "./AddEventForm";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import EventList from "./EventList";
-//import EditEvent from "./EditEvent";
-import EditEventContextReducer from "./EditEventContextReducer";
+import EditEvent from "./EditEvent";
 
 const App: React.FC = () => {
   return (
@@ -22,7 +21,7 @@ const App: React.FC = () => {
               </>
             }
           />
-          <Route path="/edit/:id" element={<EditEventContextReducer />} />
+          <Route path="/edit/:id" element={<EditEvent />} />
         </Routes>
       </Router>
     </EventProvider>

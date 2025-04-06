@@ -1,10 +1,10 @@
 // src/EventList.tsx
 import React from "react";
-import { useEventContext } from "./EventContext";
+import { useEventStorageContext } from "./EventStorageContext";
 import { Link } from "react-router-dom";
 
 const EventList: React.FC = () => {
-  const { events } = useEventContext();
+  const { events } = useEventStorageContext();
 
   return (
     <ul>

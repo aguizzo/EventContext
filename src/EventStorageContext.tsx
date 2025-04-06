@@ -1,4 +1,4 @@
-// src/EventContext.tsx
+// src/EventStorageContext.tsx
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { SelectedEventProvider } from "./SelectedEventContext";
 
@@ -15,7 +15,7 @@ export interface Event {
 }
 
 // Define the shape of the context
-interface EventContextType {
+interface EventStorageContextType {
   events: Event[];
   addEvent: (event: Event) => void;
   getEventById: (id: string) => Event | undefined;
@@ -24,13 +24,17 @@ interface EventContextType {
 }
 
 // Create the context
-const EventContext = createContext<EventContextType | undefined>(undefined);
+const EventStorageContext = createContext<EventStorageContextType | undefined>(
+  undefined
+);
 
 // Custom hook to access the context
-export const useEventContext = () => {
-  const context = useContext(EventContext);
+export const useEventStorageContext = () => {
+  const context = useContext(EventStorageContext);
   if (!context) {
-    throw new Error("useEventContext must be used within an EventProvider");
+    throw new Error(
+      "useEventStorageContext must be used within an EventProvider"
+    );
   }
   return context;
 };
@@ -98,10 +102,10 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <EventContext.Provider
+    <EventStorageContext.Provider
       value={{ events, addEvent, getEventById, updateEvent, removeEvent }}
     >
       <SelectedEventProvider>{children}</SelectedEventProvider>
-    </EventContext.Provider>
+    </EventStorageContext.Provider>
   );
 };

@@ -1,67 +1,86 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useEventContext, Event } from "./EventContext";
-
-type Action = 
-  | { type: 'UPDATE_FIELD'; field: string; value: string | number }
-  | { type: 'SET_EVENT'; payload: Event };
-
-function eventReducer(state: Event, action: Action): Event {
-  switch (action.type) {
-    case 'UPDATE_FIELD':
-      return { ...state, [action.field]: action.value };
-    case 'SET_EVENT':
-      return { ...action.payload };
-    default:
-      return state;
-  }
-}
+import { useCurrentEventContext } from "./SelectedEventContext";
+import { useEventStorageContext } from "./EventStorageContext";
 
 const EditEvent: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { getEventById, updateEvent, removeEvent } = useEventContext();
-  const [state, dispatch] = useReducer(eventReducer, {} as Event);
+  const { currentEvent, dispatch } = useCurrentEventContext();
+  const { getEventById, updateEvent, removeEvent } = useEventStorageContext();
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const event = getEventById(id!);
+    const event = getEventById(id || "");
     if (event) {
-      dispatch({ type: 'SET_EVENT', payload: event });
+      dispatch({ type: "SET_EVENT", payload: event });
     }
   }, [id, getEventById]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({ 
-      type: 'UPDATE_FIELD',
-      field: e.target.name,
-      value: e.target.value 
+    dispatch({
+      type: "UPDATE_FIELD",
+      payload: { field: e.target.name, value: e.target.value },
     });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    updateEvent(state);
-    navigate('/');
+    dispatch({ type: "SET_EVENT", payload: currentEvent });
+    updateEvent(currentEvent);
+    navigate("/");
   };
 
   const handleDelete = () => {
-    removeEvent(state.id);
-    navigate('/');
+    dispatch({ type: "DELETE_EVENT" });
+    removeEvent(currentEvent.id);
+    navigate("/");
   };
 
-  if (!state) return <div>Event not found</div>;
+  if (!currentEvent) return <div>Event not found</div>;
 
   return (
     <form onSubmit={handleSubmit}>
-      <input name="title" value={state.title || ""} onChange={handleChange} />
-      <input name="date" value={state.date || ""} onChange={handleChange} />
-      <input name="guests" type="number" value={state.guests || 0} onChange={handleChange} />
-      <input name="status" value={state.status || ""} onChange={handleChange} />
-      <input name="image" value={state.image || ""} onChange={handleChange} />
-      <input name="type" value={state.type || ""} onChange={handleChange} />
-      <input name="location" value={state.location || ""} onChange={handleChange} />
+      <input
+        name="title"
+        value={currentEvent.title || ""}
+        onChange={handleChange}
+      />
+      <input
+        name="date"
+        value={currentEvent.date || ""}
+        onChange={handleChange}
+      />
+      <input
+        name="guests"
+        type="number"
+        value={currentEvent.guests || 0}
+        onChange={handleChange}
+      />
+      <input
+        name="status"
+        value={currentEvent.status || ""}
+        onChange={handleChange}
+      />
+      <input
+        name="image"
+        value={currentEvent.image || ""}
+        onChange={handleChange}
+      />
+      <input
+        name="type"
+        value={currentEvent.type || ""}
+        onChange={handleChange}
+      />
+      <input
+        name="location"
+        value={currentEvent.location || ""}
+        onChange={handleChange}
+      />
       <button type="submit">Update</button>
-      <button type="button" onClick={handleDelete}>Delete</button>
+      <button type="button" onClick={handleDelete}>
+        Delete
+      </button>
     </form>
   );
 };

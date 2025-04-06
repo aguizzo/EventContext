@@ -1,6 +1,6 @@
 // src/EventContext.tsx
 import React, { createContext, useContext, useReducer } from "react";
-import { useEventContext, Event } from "./EventContext";
+import { Event } from "./EventStorageContext";
 
 interface CurrentEventContextType {
   currentEvent: Event;
@@ -11,7 +11,6 @@ type Action =
   | { type: "UPDATE_FIELD"; payload: { field: string; value: string | number } }
   | { type: "SET_EVENT"; payload: Event }
   | { type: "DELETE_EVENT" };
-// | { type: "ADD_EVENT"; event: Event };
 
 const CurrentEventContext = createContext<CurrentEventContextType | undefined>(
   undefined
