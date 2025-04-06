@@ -1,35 +1,39 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useCurrentEventContext } from "./SelectedEventContext";
+import { useEventContext } from "./EventContext";
 
 const EditEventContextReducer: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { currentEvent, dispatch } = useCurrentEventContext();
+  const { getEventById, updateEvent, removeEvent } = useEventContext();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (id) {
-      dispatch({ type: "SET_EVENT", id: id });
+    const event = getEventById(id || "");
+    if (event) {
+      dispatch({ type: "SET_EVENT", payload: event });
     }
-  }, [id]);
+  }, [id, getEventById]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({
       type: "UPDATE_FIELD",
-      field: e.target.name,
-      value: e.target.value,
+      payload: { field: e.target.name, value: e.target.value },
     });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch({ type: "UPDATE_EVENT" });
+    dispatch({ type: "SET_EVENT", payload: currentEvent });
+    updateEvent(currentEvent);
     navigate("/");
   };
 
   const handleDelete = () => {
     dispatch({ type: "DELETE_EVENT" });
+    removeEvent(currentEvent.id);
     navigate("/");
   };
 

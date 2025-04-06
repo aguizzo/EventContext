@@ -8,9 +8,8 @@ interface CurrentEventContextType {
 }
 
 type Action =
-  | { type: "UPDATE_FIELD"; field: string; value: string | number }
-  | { type: "SET_EVENT"; id: string }
-  | { type: "UPDATE_EVENT" }
+  | { type: "UPDATE_FIELD"; payload: { field: string; value: string | number } }
+  | { type: "SET_EVENT"; payload: Event }
   | { type: "DELETE_EVENT" };
 // | { type: "ADD_EVENT"; event: Event };
 
@@ -31,35 +30,18 @@ export const useCurrentEventContext = () => {
 export const SelectedEventProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { getEventById, updateEvent, removeEvent, addEvent } =
-    useEventContext();
-
   function eventReducer(state: Event, action: Action): Event {
     switch (action.type) {
-      // Event Actions
       case "UPDATE_FIELD": {
-        return { ...state, [action.field]: action.value };
+        const { field, value } = action.payload;
+        return { ...state, [field]: value };
       }
       case "SET_EVENT": {
-        const event = getEventById(action.id);
-        if (event) {
-          return { ...event };
-        }
-        return state;
-      }
-      // Flush Actions to sync with EventContext
-      case "UPDATE_EVENT": {
-        updateEvent(state);
-        return state;
+        return { ...action.payload };
       }
       case "DELETE_EVENT": {
-        removeEvent(state.id);
         return {} as Event;
       }
-      // case "ADD_EVENT": {
-      //   addEvent(action.event);
-      //   return action.event;
-      // }
       default:
         return state;
     }

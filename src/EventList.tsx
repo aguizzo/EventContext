@@ -13,7 +13,6 @@ const EventList: React.FC = () => {
           <Link to={`/edit/${event.id}`}>
             <h2>{event.title}</h2>
           </Link>
-          {/* ... rest of event display */}
           <img src={event.image} alt={event.title} style={{ width: "200px" }} />
         </li>
       ))}
