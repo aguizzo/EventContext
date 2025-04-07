@@ -6,16 +6,16 @@ import { useEventStorageContext } from "./EventStorageContext";
 const EditEvent: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { currentEvent, dispatch } = useCurrentEventContext();
-  const { getEventById, updateEvent, removeEvent } = useEventStorageContext();
+  const { eventStorageApi } = useEventStorageContext();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const event = getEventById(id || "");
+    const event = eventStorageApi.getEventById(id || "");
     if (event) {
       dispatch({ type: "SET_EVENT", payload: event });
     }
-  }, [id, getEventById]);
+  }, [id]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({
@@ -27,13 +27,13 @@ const EditEvent: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch({ type: "SET_EVENT", payload: currentEvent });
-    updateEvent(currentEvent);
+    eventStorageApi.updateEvent(currentEvent);
     navigate("/");
   };
 
   const handleDelete = () => {
     dispatch({ type: "DELETE_EVENT" });
-    removeEvent(currentEvent.id);
+    eventStorageApi.removeEvent(currentEvent.id);
     navigate("/");
   };
 
