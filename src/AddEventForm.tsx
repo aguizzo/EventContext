@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useEventStorageContext } from "./EventStorageContext";
 
 const AddEventForm: React.FC = () => {
-  const { addEvent } = useEventStorageContext();
+  const { eventStorageApi } = useEventStorageContext();
 
   const [formData, setFormData] = useState({
     id: "",
@@ -21,7 +21,7 @@ const AddEventForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    addEvent(formData);
+    eventStorageApi.addEvent(formData);
     alert("Event added!");
   };
 
