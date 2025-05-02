@@ -5,6 +5,7 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import EventList from "./EventList";
 import EditEvent from "./EditEvent";
+import { Page } from "./Page";
 
 const App: React.FC = () => {
   return (
@@ -22,6 +23,7 @@ const App: React.FC = () => {
             }
           />
           <Route path="/edit/:id" element={<EditEvent />} />
+          <Route path="/page" element={<Page />} />
         </Routes>
       </Router>
     </EventProvider>
